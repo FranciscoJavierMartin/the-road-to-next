@@ -1,9 +1,6 @@
-import Link from 'next/link';
-import Placeholder from '@/components/placeholder';
-import { Button } from '@/components/ui/button';
+import { notFound } from 'next/navigation';
 import TicketItem from '@/features/ticket/components/ticket-item';
 import getTicket from '@/features/ticket/queries/get-ticket';
-import { ticketsPath } from '@/paths';
 
 type TicketPageProps = {
   params: Promise<{
@@ -16,17 +13,10 @@ export default async function TicketPage({ params }: TicketPageProps) {
   const ticket = await getTicket(ticketId!);
 
   return ticket ? (
-    <div className='animate-fade-in-from-top flex justify-center'>
+    <div className='flex animate-fade-in-from-top justify-center'>
       <TicketItem ticket={ticket} isDetail />
     </div>
   ) : (
-    <Placeholder
-      label='Ticket not found'
-      button={
-        <Button asChild variant='outline'>
-          <Link href={ticketsPath}>Go to tickets</Link>
-        </Button>
-      }
-    />
+    notFound()
   );
 }
