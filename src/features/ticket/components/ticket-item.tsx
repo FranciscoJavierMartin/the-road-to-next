@@ -1,9 +1,11 @@
+'use client';
 import { Ticket } from '@prisma/client';
 import clsx from 'clsx';
-import { SquareArrowOutUpRight } from 'lucide-react';
+import { LucideTrash, SquareArrowOutUpRight } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import deleteTicket from '@/features/ticket/actions/delete-ticket';
 import { TICKET_ICONS } from '@/features/ticket/constants';
 import { ticketPath } from '@/paths';
 
@@ -13,6 +15,10 @@ type TicketItemProps = {
 };
 
 export default function TicketItem({ ticket, isDetail }: TicketItemProps) {
+  async function handleDeleteTicket(): Promise<void> {
+    await deleteTicket(ticket.id);
+  }
+
   const detailButton = (
     <Button asChild variant='outline' size='icon'>
       <Link href={ticketPath(ticket.id)} className='text-sm underline'>
@@ -20,6 +26,13 @@ export default function TicketItem({ ticket, isDetail }: TicketItemProps) {
       </Link>
     </Button>
   );
+
+  const deleteButton = (
+    <Button variant='outline' size='icon' onClick={handleDeleteTicket}>
+      <LucideTrash className='size-4' />
+    </Button>
+  );
+
   return (
     <div
       className={clsx('flex w-full gap-x-1', {
@@ -44,7 +57,9 @@ export default function TicketItem({ ticket, isDetail }: TicketItemProps) {
           </span>
         </CardContent>
       </Card>
-      {!isDetail && <div className='flex flex-col gap-y-1'>{detailButton}</div>}
+      <div className='flex flex-col gap-y-1'>
+        {isDetail ? deleteButton : detailButton}
+      </div>
     </div>
   );
 }
