@@ -16,7 +16,7 @@ type TicketItemProps = {
 export default function TicketItem({ ticket, isDetail }: TicketItemProps) {
   const detailButton = (
     <Button asChild variant='outline' size='icon'>
-      <Link href={ticketPath(ticket.id)} className='text-sm underline'>
+      <Link prefetch href={ticketPath(ticket.id)}>
         <SquareArrowOutUpRight className='size-4' />
       </Link>
     </Button>
