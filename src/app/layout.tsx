@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import Header from '@/components/header';
 import ThemeProvider from '@/components/theme/theme-provider';
+import { Toaster } from '@/components/ui/sonner';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -32,9 +33,10 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <Header />
-          <main className='bg-secondary/20 flex min-h-screen flex-1 flex-col overflow-y-auto overflow-x-hidden px-8 py-24'>
+          <main className='flex min-h-screen flex-1 flex-col overflow-y-auto overflow-x-hidden bg-secondary/20 px-8 py-24'>
             {children}
           </main>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
