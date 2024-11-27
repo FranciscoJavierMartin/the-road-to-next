@@ -13,10 +13,10 @@ const upsertTicketSchema = z.object({
 
 export default async function upsertTicket(
   id: string | undefined = '',
-  _actionState: { message: string },
+  _actionState: { message: string; payload?: FormData },
   formData: FormData,
-): Promise<{ message: string }> {
-  let res: { message: string };
+): Promise<{ message: string; payload?: FormData }> {
+  let res: { message: string; payload?: FormData };
 
   try {
     const data = upsertTicketSchema.parse({
@@ -38,7 +38,7 @@ export default async function upsertTicket(
 
     res = { message: 'Ticket created' };
   } catch {
-    res = { message: 'Something went wrong' };
+    res = { message: 'Something went wrong', payload: formData };
   }
 
   return res;
