@@ -13,6 +13,7 @@ import {
 import deleteTicket from '@/features/ticket/actions/delete-ticket';
 import { TICKET_ICONS } from '@/features/ticket/constants';
 import { editTicketPath, ticketPath } from '@/paths';
+import { toCurrencyFromCent } from '@/utils/currency';
 
 type TicketItemProps = {
   ticket: Ticket;
@@ -69,7 +70,9 @@ export default function TicketItem({ ticket, isDetail }: TicketItemProps) {
         </CardContent>
         <CardFooter className='flex justify-between'>
           <p className='text-sm text-muted-foreground'>{ticket.deadline}</p>
-          <p className='text-sm text-muted-foreground'>{ticket.bounty}</p>
+          <p className='text-sm text-muted-foreground'>
+            {toCurrencyFromCent(ticket.bounty)}
+          </p>
         </CardFooter>
       </Card>
       <div className='flex flex-col gap-y-1'>

@@ -11,6 +11,7 @@ import {
 } from '@/components/form/utils/to-action-state';
 import { prisma } from '@/lib/prisma';
 import { ticketPath, ticketsPath } from '@/paths';
+import { toCent } from '@/utils/currency';
 
 const upsertTicketSchema = z.object({
   title: z.string().min(1).max(191),
@@ -34,10 +35,15 @@ export default async function upsertTicket(
       bounty: formData.get('bounty'),
     });
 
+    const dbData = {
+      ...data,
+      bounty: toCent(data.bounty),
+    };
+
     await prisma.ticket.upsert({
       where: { id },
-      update: data,
-      create: data,
+      update: dbData,
+      create: dbData,
     });
 
     revalidatePath(ticketsPath);
