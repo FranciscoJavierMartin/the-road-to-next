@@ -23,8 +23,10 @@ export default function TicketUpsertForm({ ticket }: TicketUpsertFormProps) {
     EMPTY_ACTION_STATE,
   );
 
+  function handleSuccess(): void {}
+
   return (
-    <Form action={action} actionState={actionState}>
+    <Form action={action} actionState={actionState} onSuccess={handleSuccess}>
       <Label htmlFor='title'>Title</Label>
       <Input
         id='title'
