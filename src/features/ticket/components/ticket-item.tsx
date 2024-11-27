@@ -3,11 +3,9 @@ import clsx from 'clsx';
 import {
   LucideMoreVertical,
   LucidePencil,
-  LucideTrash,
   SquareArrowOutUpRight,
 } from 'lucide-react';
 import Link from 'next/link';
-import ConfirmDialog from '@/components/confirm-dialog';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -16,7 +14,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import deleteTicket from '@/features/ticket/actions/delete-ticket';
 import TicketMoreMenu from '@/features/ticket/components/ticket-more-menu';
 import { TICKET_ICONS } from '@/features/ticket/constants';
 import { editTicketPath, ticketPath } from '@/paths';
@@ -34,17 +31,6 @@ export default function TicketItem({ ticket, isDetail }: TicketItemProps) {
         <SquareArrowOutUpRight className='size-4' />
       </Link>
     </Button>
-  );
-
-  const deleteButton = (
-    <ConfirmDialog
-      action={deleteTicket.bind(null, ticket.id)}
-      trigger={
-        <Button variant='outline' size='icon'>
-          <LucideTrash className='size-4' />
-        </Button>
-      }
-    ></ConfirmDialog>
   );
 
   const editButton = (
@@ -100,14 +86,12 @@ export default function TicketItem({ ticket, isDetail }: TicketItemProps) {
         {isDetail ? (
           <>
             {editButton}
-            {deleteButton}
             {moreMenu}
           </>
         ) : (
           <>
             {detailButton}
             {editButton}
-            {moreMenu}
           </>
         )}
       </div>

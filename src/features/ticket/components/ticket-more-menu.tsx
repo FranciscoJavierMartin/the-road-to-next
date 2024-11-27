@@ -4,6 +4,7 @@ import { Ticket, TicketStatus } from '@prisma/client';
 import { LucideTrash } from 'lucide-react';
 import { ReactElement } from 'react';
 import { toast } from 'sonner';
+import useConfirmDialog from '@/components/confirm-dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,6 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import deleteTicket from '@/features/ticket/actions/delete-ticket';
 import { updateTicketStatus } from '@/features/ticket/actions/update-ticket-status';
 import { TICKET_STATUS_LABELS } from '@/features/ticket/constants';
 
@@ -25,12 +27,15 @@ export default function TicketMoreMenu({
   ticket,
   trigger,
 }: TicketMoreMenuProps) {
-  const deleteButton = (
-    <DropdownMenuItem>
-      <LucideTrash className='size-4' />
-      <span>Delete</span>
-    </DropdownMenuItem>
-  );
+  const [deleteButton, deleteDialog] = useConfirmDialog({
+    action: deleteTicket.bind(null, ticket.id),
+    trigger: (
+      <DropdownMenuItem>
+        <LucideTrash className='size-4' />
+        <span>Delete</span>
+      </DropdownMenuItem>
+    ),
+  });
 
   async function handleUpdateTicketStatus(value: string): Promise<void> {
     const promise = updateTicketStatus(ticket.id, value as TicketStatus);
@@ -65,13 +70,16 @@ export default function TicketMoreMenu({
   );
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
-      <DropdownMenuContent className='w-56' side='right'>
-        {ticketStatusRadioGroup}
-        <DropdownMenuSeparator />
-        {deleteButton}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <>
+      {deleteDialog}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
+        <DropdownMenuContent className='w-56' side='right'>
+          {ticketStatusRadioGroup}
+          <DropdownMenuSeparator />
+          {deleteButton}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
   );
 }
