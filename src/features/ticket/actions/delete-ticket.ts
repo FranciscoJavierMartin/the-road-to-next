@@ -7,6 +7,6 @@ import { ticketsPath } from '@/paths';
 
 export default async function deleteTicket(id: string): Promise<void> {
   await prisma.ticket.delete({ where: { id } });
-  await setCookieByKey('toast', 'Ticket delete');
+  await setCookieByKey('toast', 'Ticket deleted');
   redirect(ticketsPath);
 }
