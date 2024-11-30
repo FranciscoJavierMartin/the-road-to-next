@@ -38,12 +38,9 @@ export default async function signUp(
   let res: ActionState;
 
   try {
-    const { username, email, password } = signUpSchema.parse({
-      username: formData.get('username'),
-      email: formData.get('email'),
-      password: formData.get('password'),
-      confirmPassword: formData.get('confirmPassword'),
-    });
+    const { username, email, password } = signUpSchema.parse(
+      Object.fromEntries(formData),
+    );
     res = toActionState('SUCCESS', 'Sign up successful');
   } catch (error) {
     res = fromErrorToActionState(error, formData);
