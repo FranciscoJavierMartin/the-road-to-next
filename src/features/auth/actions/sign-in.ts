@@ -10,6 +10,8 @@ import {
 } from '@/components/form/utils/to-action-state';
 import { lucia } from '@/lib/lucia';
 import { prisma } from '@/lib/prisma';
+import { redirect } from 'next/navigation';
+import { ticketsPath } from '@/paths';
 
 const signInSchema = z.object({
   email: z.string().min(1, { message: 'Is required' }).max(191).email(),
@@ -32,7 +34,7 @@ export default async function signIn(
     });
 
     if (!(user && verify(user.passwordHash, password))) {
-      res = toActionState('ERROR', 'Invalid email or password');
+      res = toActionState('ERROR', 'Invalid email or password', formData);
     } else {
       const session = await lucia.createSession(user.id, {});
       const sessionCookie = lucia.createSessionCookie(session.id);
@@ -42,7 +44,8 @@ export default async function signIn(
         sessionCookie.value,
         sessionCookie.attributes,
       );
-      res = toActionState('SUCCESS', 'Sign in successful');
+
+      redirect(ticketsPath);
     }
   } catch (error) {
     res = fromErrorToActionState(error, formData);

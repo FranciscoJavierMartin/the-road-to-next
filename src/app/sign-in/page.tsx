@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import CardCompact from '@/components/card-compact';
 import SignInForm from '@/features/auth/components/sign-in-form';
-import { passwordForgotPath, signInPath } from '@/paths';
+import { passwordForgotPath, signUpPath } from '@/paths';
 
 export default function SignInPage() {
   return (
@@ -12,7 +12,7 @@ export default function SignInPage() {
         className='w-full max-w-[420px] animate-fade-in-from-top'
         footer={
           <div className='flex w-full justify-between'>
-            <Link href={signInPath} className='text-sm text-muted-foreground'>
+            <Link href={signUpPath} className='text-sm text-muted-foreground'>
               Not account yet?
             </Link>
             <Link
