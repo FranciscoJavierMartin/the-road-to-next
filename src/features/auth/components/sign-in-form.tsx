@@ -24,7 +24,7 @@ export default function SignInForm() {
         name='password'
         type='password'
         placeholder='Password'
-        defaultValue={actionState.payload?.get('email') as string}
+        defaultValue={actionState.payload?.get('password') as string}
       />
       <FieldError actionState={actionState} name='password' />
       <SubmitButton label='Sign In' />

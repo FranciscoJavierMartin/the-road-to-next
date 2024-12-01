@@ -1,39 +1,24 @@
 'use server';
 
-import { Session, User } from 'lucia';
+import { Session, User } from '@prisma/client';
 import { cookies } from 'next/headers';
-import { lucia } from '@/lib/lucia';
+import { SESSION_COOKIE_NAME } from '@/features/auth/utils/session-cookie';
+import { validateSession } from '@/lib/lucia';
 
-export default async function getAuth() {
+export default async function getAuth(): Promise<
+  { user: User; session: Session } | { user: null; session: null }
+> {
   let result: { user: User; session: Session } | { user: null; session: null };
-  const sessionId = (await cookies()).get(lucia.sessionCookieName)?.value;
+  const sessionToken = (await cookies()).get(SESSION_COOKIE_NAME)?.value;
 
-  if (!sessionId) {
+  if (!sessionToken) {
     result = {
       user: null,
       session: null,
     };
   } else {
-    result = await lucia.validateSession(sessionId);
-
-    try {
-      if (result.session && result.session.fresh) {
-        const sessionCookie = lucia.createSessionCookie(result.session.id);
-        (await cookies()).set(
-          sessionCookie.name,
-          sessionCookie.value,
-          sessionCookie.attributes,
-        );
-      }
-      if (!result.session) {
-        const sessionCookie = lucia.createBlankSessionCookie();
-        (await cookies()).set(
-          sessionCookie.name,
-          sessionCookie.value,
-          sessionCookie.attributes,
-        );
-      }
-    } catch {}
+    result = await validateSession(sessionToken);
   }
+
   return result;
 }

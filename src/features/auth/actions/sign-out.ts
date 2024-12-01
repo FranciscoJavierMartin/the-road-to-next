@@ -1,9 +1,9 @@
 'use server';
 
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import getAuth from '@/features/auth/queries/get-auth';
-import { lucia } from '@/lib/lucia';
+import { deleteSessionCookie } from '@/features/auth/utils/session-cookie';
+import { invalidateSession } from '@/lib/lucia';
 import { signInPath } from '@/paths';
 
 export default async function signOut(): Promise<void> {
@@ -13,15 +13,8 @@ export default async function signOut(): Promise<void> {
     redirect(signInPath);
   }
 
-  await lucia.invalidateSession(session.userId);
-
-  const sessionCookie = lucia.createBlankSessionCookie();
-
-  (await cookies()).set(
-    sessionCookie.name,
-    sessionCookie.value,
-    sessionCookie.attributes,
-  );
+  await invalidateSession(session.id);
+  await deleteSessionCookie();
 
   redirect(signInPath);
 }
