@@ -7,6 +7,7 @@ import {
   fromErrorToActionState,
   toActionState,
 } from '@/components/form/utils/to-action-state';
+import getAuthOrRedirect from '@/features/auth/queries/get-auth-or-redirect';
 import { prisma } from '@/lib/prisma';
 import { ticketPath, ticketsPath } from '@/paths';
 
@@ -17,8 +18,10 @@ export async function updateTicketStatus(
   let res: ActionState;
 
   try {
+    const { user } = await getAuthOrRedirect();
+
     await prisma.ticket.update({
-      where: { id },
+      where: { id, userId: user.id },
       data: { status },
     });
 
