@@ -24,8 +24,6 @@ export default async function signIn(
   _actionState: ActionState,
   formData: FormData,
 ) {
-  let res: ActionState;
-
   try {
     const { email, password } = signInSchema.parse(
       Object.fromEntries(formData),
@@ -35,35 +33,24 @@ export default async function signIn(
       where: { email },
     });
 
-    console.log(user);
-
-    try {
-      if (user) {
-        console.log(user.passwordHash);
-        console.log(password);
-        await verifyPasswordHash(user.passwordHash, password);
-      }
-    } catch (error) {
-      console.log('Perro');
-      console.log(error);
+    if (!user) {
+      return toActionState('ERROR', 'Incorrect email or password', formData);
     }
 
-    if (user && (await verifyPasswordHash(user.passwordHash, password))) {
-      const sessionToken = generateRandomToken();
-      const session = await createSession(sessionToken, user.id);
+    const validPassword = await verifyPasswordHash(user.passwordHash, password);
 
-      await setSessionCookie(sessionToken, session.expiresAt);
-      console.log('Hello');
-      revalidatePath(ticketsPath);
-      throw redirect(ticketsPath);
-    } else {
-      return toActionState('ERROR', 'Invalid email or password', formData);
+    if (!validPassword) {
+      return toActionState('ERROR', 'Incorrect email or password', formData);
     }
+
+    const sessionToken = generateRandomToken();
+    const session = await createSession(sessionToken, user.id);
+
+    await setSessionCookie(sessionToken, session.expiresAt);
   } catch (error) {
-    console.log('Mio');
-    console.log(error);
     return fromErrorToActionState(error, formData);
   }
 
-  return res;
+  revalidatePath(ticketsPath);
+  redirect(ticketsPath);
 }
