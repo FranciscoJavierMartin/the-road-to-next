@@ -1,6 +1,18 @@
+import { hash } from '@node-rs/argon2';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
+
+const users = [
+  {
+    username: 'admin',
+    email: 'admin@admin.com',
+  },
+  {
+    username: 'user',
+    email: 'ticketbounty.from062@passmail.net',
+  },
+];
 
 const tickets = [
   {
@@ -27,8 +39,17 @@ const tickets = [
 ];
 
 async function seed(): Promise<void> {
-  await Promise.all([prisma.ticket.deleteMany()]);
-  await Promise.allSettled([prisma.ticket.createMany({ data: tickets })]);
+  await Promise.all([prisma.ticket.deleteMany(), prisma.user.deleteMany()]);
+  const passwordHash = await hash('adminadmin');
+  const dbUsers = await prisma.user.createManyAndReturn({
+    data: users.map((user) => ({
+      ...user,
+      passwordHash,
+    })),
+  });
+  await prisma.ticket.createMany({
+    data: tickets.map((ticket) => ({ ...ticket, userId: dbUsers[0].id })),
+  });
 }
 
 seed();

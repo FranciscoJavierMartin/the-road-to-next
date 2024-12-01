@@ -1,4 +1,3 @@
-import { Ticket } from '@prisma/client';
 import clsx from 'clsx';
 import {
   LucideMoreVertical,
@@ -16,11 +15,12 @@ import {
 } from '@/components/ui/card';
 import TicketMoreMenu from '@/features/ticket/components/ticket-more-menu';
 import { TICKET_ICONS } from '@/features/ticket/constants';
+import { TicketWithMetadata } from '@/features/ticket/types';
 import { editTicketPath, ticketPath } from '@/paths';
 import { toCurrencyFromCent } from '@/utils/currency';
 
 type TicketItemProps = {
-  ticket: Ticket;
+  ticket: TicketWithMetadata;
   isDetail?: boolean;
 };
 
@@ -76,7 +76,9 @@ export default function TicketItem({ ticket, isDetail }: TicketItemProps) {
           </span>
         </CardContent>
         <CardFooter className='flex justify-between'>
-          <p className='text-sm text-muted-foreground'>{ticket.deadline}</p>
+          <p className='text-sm text-muted-foreground'>
+            {ticket.deadline} by {ticket.user.username}
+          </p>
           <p className='text-sm text-muted-foreground'>
             {toCurrencyFromCent(ticket.bounty)}
           </p>
