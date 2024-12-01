@@ -1,4 +1,6 @@
-import { Session,User } from 'lucia';
+'use server';
+
+import { Session, User } from 'lucia';
 import { cookies } from 'next/headers';
 import { lucia } from '@/lib/lucia';
 
