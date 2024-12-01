@@ -5,7 +5,6 @@ import { z } from 'zod';
 import {
   ActionState,
   fromErrorToActionState,
-  toActionState,
 } from '@/components/form/utils/to-action-state';
 import { setSessionCookie } from '@/features/auth/utils/session-cookie';
 import { hashPassword } from '@/features/password/utils/hash-and-verify';
@@ -42,8 +41,6 @@ export default async function signUp(
   _actionState: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  let res: ActionState;
-
   try {
     const { username, email, password } = signUpSchema.parse(
       Object.fromEntries(formData),
@@ -61,13 +58,9 @@ export default async function signUp(
     const session = await createSession(sessionToken, user.id);
 
     await setSessionCookie(sessionToken, session.expiresAt);
-
-    res = toActionState('SUCCESS', 'Sign up successful');
-
-    redirect(ticketsPath);
   } catch (error) {
-    res = fromErrorToActionState(error, formData);
+    return fromErrorToActionState(error, formData);
   }
 
-  return res;
+  redirect(ticketsPath);
 }
