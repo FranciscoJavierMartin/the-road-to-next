@@ -1,8 +1,11 @@
-import { Ticket } from '@prisma/client';
+import { TicketWithMetadata } from '@/features/ticket/types';
 import { prisma } from '@/lib/prisma';
 
-export default async function getTickets(): Promise<Ticket[]> {
+export default async function getTickets(
+  userId?: string,
+): Promise<TicketWithMetadata[]> {
   return await prisma.ticket.findMany({
+    where: { userId },
     orderBy: { createdAt: 'desc' },
     include: {
       user: {

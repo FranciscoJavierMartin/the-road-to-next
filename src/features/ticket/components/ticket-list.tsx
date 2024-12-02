@@ -1,11 +1,15 @@
 import getTickets from '@/features/ticket/queries/get-tickets';
 import TicketItem from './ticket-item';
 
-export default async function TicketList() {
-  const tickets = await getTickets();
+type TicketListProps = {
+  userId?: string;
+};
+
+export default async function TicketList({ userId }: TicketListProps) {
+  const tickets = await getTickets(userId);
 
   return (
-    <div className='animate-fade-in-from-top flex flex-1 flex-col items-center gap-y-4'>
+    <div className='flex flex-1 animate-fade-in-from-top flex-col items-center gap-y-4'>
       {tickets.map((ticket) => (
         <TicketItem key={ticket.id} ticket={ticket} />
       ))}
