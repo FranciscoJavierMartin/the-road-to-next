@@ -5,23 +5,15 @@ import ThemeSwitcher from '@/components/theme/theme-switcher';
 import { buttonVariants } from '@/components/ui/button';
 import signOut from '@/features/auth/actions/sign-out';
 import getAuth from '@/features/auth/queries/get-auth';
-import { homePath, signInPath, signUpPath, ticketsPath } from '@/paths';
+import { homePath, signInPath, signUpPath } from '@/paths';
 
 export default async function Header() {
   const { user } = await getAuth();
 
   const navItems = user ? (
-    <>
-      <Link
-        href={ticketsPath}
-        className={buttonVariants({ variant: 'default' })}
-      >
-        Tickets
-      </Link>
-      <form action={signOut}>
-        <SubmitButton label='Sign Out' icon={<LucideLogOut />} />
-      </form>
-    </>
+    <form action={signOut}>
+      <SubmitButton label='Sign Out' icon={<LucideLogOut />} />
+    </form>
   ) : (
     <>
       <Link
