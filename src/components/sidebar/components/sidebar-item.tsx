@@ -1,7 +1,4 @@
-'use client';
-
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { cloneElement } from 'react';
 import { closedClassName } from '@/components/sidebar/constants';
 import { NavItem } from '@/components/sidebar/types';
@@ -11,13 +8,15 @@ import { cn } from '@/lib/utils';
 
 type SidebarItemProps = {
   isOpen: boolean;
+  isActive: boolean;
   navItem: NavItem;
 };
 
-export default function SidebarItem({ isOpen, navItem }: SidebarItemProps) {
-  const path = usePathname();
-  const isActive = path === navItem.href;
-
+export default function SidebarItem({
+  isOpen,
+  isActive,
+  navItem,
+}: SidebarItemProps) {
   return (
     <>
       {navItem.separator && <Separator />}
