@@ -1,7 +1,6 @@
 import { User } from '@prisma/client';
 import { LucideLock, LucideLogOut, LucideUser } from 'lucide-react';
 import Link from 'next/link';
-import SubmitButton from '@/components/form/submit-button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -44,7 +43,8 @@ export default function AccountDropdown({ user }: AccountDropdownProps) {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <form action={signOut}>
-            <SubmitButton label='Sign Out' icon={<LucideLogOut />} />
+            <LucideLogOut className='mr-2 size-4' />
+            <button type='submit'>Sign Out</button>
           </form>
         </DropdownMenuItem>
       </DropdownMenuContent>
