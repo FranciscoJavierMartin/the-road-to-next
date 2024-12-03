@@ -1,10 +1,10 @@
 import { LucideKanban } from 'lucide-react';
 import Link from 'next/link';
+import AccountDropdown from '@/app/_navigation/account-dropdown';
 import ThemeSwitcher from '@/components/theme/theme-switcher';
 import { buttonVariants } from '@/components/ui/button';
 import getAuth from '@/features/auth/queries/get-auth';
 import { homePath, signInPath, signUpPath } from '@/paths';
-import AccountDropdown from './account-dropdown';
 
 export default async function Header() {
   const { user } = await getAuth();

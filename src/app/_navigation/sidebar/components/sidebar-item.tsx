@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { cloneElement } from 'react';
-import { closedClassName } from '@/components/sidebar/constants';
-import { NavItem } from '@/components/sidebar/types';
+import { closedClassName } from '@/app/_navigation/sidebar/constants';
+import { NavItem } from '@/app/_navigation/sidebar/types';
 import { buttonVariants } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
