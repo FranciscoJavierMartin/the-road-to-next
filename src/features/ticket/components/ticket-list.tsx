@@ -1,5 +1,6 @@
 import Placeholder from '@/components/placeholder';
 import SearchInput from '@/components/search-input';
+import SortSelect from '@/components/sort-select';
 import TicketItem from '@/features/ticket/components/ticket-item';
 import getTickets from '@/features/ticket/queries/get-tickets';
 import { SearchParams } from '@/features/ticket/search-params';
@@ -17,8 +18,15 @@ export default async function TicketList({
 
   return (
     <div className='flex flex-1 animate-fade-in-from-top flex-col items-center gap-y-4'>
-      <div className='w-full max-w-[420px]'>
+      <div className='flex w-full max-w-[420px] gap-x-2'>
         <SearchInput placeholder='Search tickets ...' />
+        <SortSelect
+          defaultValue='newest'
+          options={[
+            { label: 'Newest', value: 'newest' },
+            { label: 'Oldest', value: 'oldest' },
+          ]}
+        />
       </div>
       {tickets.length ? (
         tickets.map((ticket) => <TicketItem key={ticket.id} ticket={ticket} />)
