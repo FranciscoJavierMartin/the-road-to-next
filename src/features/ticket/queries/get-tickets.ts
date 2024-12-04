@@ -1,11 +1,19 @@
+import { SearchParams } from '@/features/ticket/search-params';
 import { TicketWithMetadata } from '@/features/ticket/types';
 import { prisma } from '@/lib/prisma';
 
 export default async function getTickets(
-  userId?: string,
+  userId: string | undefined,
+  searchParams: SearchParams,
 ): Promise<TicketWithMetadata[]> {
   return await prisma.ticket.findMany({
-    where: { userId },
+    where: {
+      userId,
+      title: {
+        contains: searchParams.search,
+        mode: 'insensitive',
+      },
+    },
     orderBy: { createdAt: 'desc' },
     include: {
       user: {
