@@ -21,7 +21,6 @@ export default async function TicketList({
       <div className='flex w-full max-w-[420px] gap-x-2'>
         <SearchInput placeholder='Search tickets ...' />
         <SortSelect
-          defaultValue='newest'
           options={[
             { label: 'Newest', value: 'newest' },
             { label: 'Oldest', value: 'oldest' },
