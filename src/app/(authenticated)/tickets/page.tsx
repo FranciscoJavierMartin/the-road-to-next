@@ -7,12 +7,12 @@ import Spinner from '@/components/spinner';
 import getAuth from '@/features/auth/queries/get-auth';
 import TicketList from '@/features/ticket/components/ticket-list';
 import TicketUpsertForm from '@/features/ticket/components/ticket-upsert-form';
-import { SearchParams } from '@/features/ticket/search-params';
+import { ParsedSearchParams } from '@/features/ticket/search-params';
 
 export const dynamic = 'force-dynamic';
 
 type TicketsPageProps = {
-  searchParams: Promise<SearchParams>;
+  searchParams: Promise<ParsedSearchParams>;
 };
 
 export default async function TicketsPage({ searchParams }: TicketsPageProps) {
