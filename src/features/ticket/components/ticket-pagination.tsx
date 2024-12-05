@@ -7,11 +7,26 @@ import {
   paginationParser,
 } from '@/features/ticket/search-params';
 
-export default function TicketPagination() {
+type TicketPaginationProps = {
+  paginatedTicketMetadata: {
+    count: number;
+    hasNextPage: boolean;
+  };
+};
+
+export default function TicketPagination({
+  paginatedTicketMetadata,
+}: TicketPaginationProps) {
   const [pagination, setPagination] = useQueryStates(
     paginationParser,
     paginationOptions,
   );
 
-  return <Pagination pagination={pagination} onPagination={setPagination} />;
+  return (
+    <Pagination
+      pagination={pagination}
+      onPagination={setPagination}
+      paginationMetadata={paginatedTicketMetadata}
+    />
+  );
 }

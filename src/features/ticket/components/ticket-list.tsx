@@ -15,7 +15,10 @@ export default async function TicketList({
   userId,
   searchParams,
 }: TicketListProps) {
-  const tickets = await getTickets(userId, searchParams);
+  const { list: tickets, metadata: ticketsMetadata } = await getTickets(
+    userId,
+    searchParams,
+  );
 
   return (
     <div className='flex flex-1 animate-fade-in-from-top flex-col items-center gap-y-4'>
@@ -47,7 +50,7 @@ export default async function TicketList({
         <Placeholder label='No tickets found' />
       )}
       <div className='w-full max-w-[420px]'>
-        <TicketPagination />
+        <TicketPagination paginatedTicketMetadata={ticketsMetadata} />
       </div>
     </div>
   );
