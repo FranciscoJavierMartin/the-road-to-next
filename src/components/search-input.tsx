@@ -1,21 +1,23 @@
 'use client';
 
-import { useQueryState } from 'nuqs';
 import { ChangeEvent } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import { Input } from '@/components/ui/input';
-import { searchParser } from '@/features/ticket/search-params';
 
 type SearchInputProps = {
+  value: string;
+  onChange: (value: string) => void;
   placeholder: string;
 };
 
-export default function SearchInput({ placeholder }: SearchInputProps) {
-  const [search, setSearch] = useQueryState('search', searchParser);
-
+export default function SearchInput({
+  placeholder,
+  onChange,
+  value,
+}: SearchInputProps) {
   const handleSearch = useDebouncedCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
-      setSearch(event.target.value);
+      onChange(event.target.value);
     },
     250,
   );
@@ -24,7 +26,7 @@ export default function SearchInput({ placeholder }: SearchInputProps) {
     <Input
       placeholder={placeholder}
       onChange={handleSearch}
-      defaultValue={search}
+      defaultValue={value}
     />
   );
 }
