@@ -1,4 +1,11 @@
 import { Button } from '@/components/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 type PageAndSize = {
   page: number;
@@ -24,6 +31,10 @@ export default function Pagination({
   const actualEndOffset = Math.min(endOffset, count);
 
   const label = `${startOffset}-${actualEndOffset} of ${count}`;
+
+  function handleChangeSize(size: string): void {
+    onPagination({ page: 0, size: parseInt(size) });
+  }
 
   function handlePreviousPage(): void {
     onPagination({ ...pagination, page: pagination.page - 1 });
@@ -55,10 +66,30 @@ export default function Pagination({
     </Button>
   );
 
+  const sizeButton = (
+    <Select
+      onValueChange={handleChangeSize}
+      defaultValue={pagination.size.toString()}
+    >
+      <SelectTrigger className='h-[36px]'>
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value='2'>2</SelectItem>
+        <SelectItem value='5'>5</SelectItem>
+        <SelectItem value='10'>10</SelectItem>
+        <SelectItem value='25'>25</SelectItem>
+        <SelectItem value='50'>50</SelectItem>
+        <SelectItem value='100'>100</SelectItem>
+      </SelectContent>
+    </Select>
+  );
+
   return (
     <div className='flex items-center justify-between'>
       <p className='text-sm text-muted-foreground'>{label}</p>
       <div className='flex gap-x-2'>
+        {sizeButton}
         {previoustButton}
         {nextButton}
       </div>
