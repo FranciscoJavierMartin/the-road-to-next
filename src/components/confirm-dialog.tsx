@@ -21,6 +21,7 @@ type UseConfirmDialogArgs = {
   description?: string;
   action: () => Promise<ActionState>;
   trigger: ReactElement;
+  onSuccess?: (actionState: ActionState) => void;
 };
 
 export default function useConfirmDialog({
@@ -28,6 +29,7 @@ export default function useConfirmDialog({
   description = 'This action cannot be undone. Make sure you understand the consequences.',
   action,
   trigger,
+  onSuccess,
 }: UseConfirmDialogArgs) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const dialogTrigger = cloneElement(trigger, {
@@ -35,6 +37,11 @@ export default function useConfirmDialog({
   });
 
   const [actionState, formAction] = useActionState(action, EMPTY_ACTION_STATE);
+
+  function handleSuccess(): void {
+    setIsOpen(false);
+    onSuccess?.(actionState);
+  }
 
   const dialog = (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
@@ -46,7 +53,11 @@ export default function useConfirmDialog({
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction asChild>
-            <Form action={formAction} actionState={actionState}>
+            <Form
+              action={formAction}
+              actionState={actionState}
+              onSuccess={handleSuccess}
+            >
               <SubmitButton label='Confirm' />
             </Form>
           </AlertDialogAction>

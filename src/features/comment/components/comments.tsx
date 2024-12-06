@@ -30,6 +30,10 @@ export default function Comments({
     setMetadata(morePaginatedComments.metadata);
   }
 
+  function handleDeleteComment(id: string): void {
+    setComments((prev) => prev.filter((comment) => comment.id !== id));
+  }
+
   return (
     <>
       <CardCompact
@@ -41,7 +45,12 @@ export default function Comments({
       <div className='ml-8 flex flex-col gap-y-2'>
         {comments.map((comment) => (
           <CommentItem key={comment.id} comment={comment}>
-            {comment.isOwner ? <CommentDeleteButton id={comment.id} /> : null}
+            {comment.isOwner ? (
+              <CommentDeleteButton
+                id={comment.id}
+                onDeleteComment={handleDeleteComment}
+              />
+            ) : null}
           </CommentItem>
         ))}
       </div>
