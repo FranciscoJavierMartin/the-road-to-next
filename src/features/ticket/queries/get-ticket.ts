@@ -1,10 +1,14 @@
+import getAuth from '@/features/auth/queries/get-auth';
+import isOwner from '@/features/auth/utils/is-owner';
 import { TicketWithMetadata } from '@/features/ticket/types';
 import { prisma } from '@/lib/prisma';
 
 export default async function getTicket(
   id: string,
 ): Promise<TicketWithMetadata | null> {
-  return await prisma.ticket.findUnique({
+  const { user } = await getAuth();
+
+  const ticket = await prisma.ticket.findUnique({
     where: { id },
     include: {
       user: {
@@ -12,4 +16,6 @@ export default async function getTicket(
       },
     },
   });
+
+  return ticket ? { ...ticket, isOwner: isOwner(user, ticket) } : null;
 }

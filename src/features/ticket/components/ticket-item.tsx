@@ -1,3 +1,5 @@
+'use client';
+
 import clsx from 'clsx';
 import {
   LucideMoreVertical,
@@ -13,8 +15,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import getAuth from '@/features/auth/queries/get-auth';
-import isOwner from '@/features/auth/utils/is-owner';
 import Comments from '@/features/comment/components/comments';
 import { CommentWithMetadata } from '@/features/comment/types';
 import TicketMoreMenu from '@/features/ticket/components/ticket-more-menu';
@@ -29,14 +29,11 @@ type TicketItemProps = {
   comments?: CommentWithMetadata[];
 };
 
-export default async function TicketItem({
+export default function TicketItem({
   ticket,
   isDetail,
   comments,
 }: TicketItemProps) {
-  const { user } = await getAuth();
-  const isTicketOwner: boolean = isOwner(user, ticket);
-
   const detailButton = (
     <Button asChild variant='outline' size='icon'>
       <Link prefetch href={ticketPath(ticket.id)}>
@@ -45,7 +42,7 @@ export default async function TicketItem({
     </Button>
   );
 
-  const editButton = isTicketOwner ? (
+  const editButton = ticket.isOwner ? (
     <Button variant='outline' size='icon' asChild>
       <Link prefetch href={editTicketPath(ticket.id)}>
         <LucidePencil className='size-4' />
@@ -53,7 +50,7 @@ export default async function TicketItem({
     </Button>
   ) : null;
 
-  const moreMenu = isTicketOwner ? (
+  const moreMenu = ticket.isOwner ? (
     <TicketMoreMenu
       ticket={ticket}
       trigger={

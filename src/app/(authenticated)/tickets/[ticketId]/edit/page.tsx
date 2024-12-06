@@ -16,7 +16,7 @@ export default async function TicketEditPage({ params }: TicketEditPageProps) {
   const { ticketId } = await params;
   const ticket = await getTicket(ticketId!);
 
-  return ticket ? (
+  return ticket?.isOwner ? (
     <div className='flex flex-1 flex-col gap-y-8'>
       <Breadcrumbs
         breadcrumbs={[
