@@ -19,7 +19,7 @@ export default async function TicketPage({ params }: TicketPageProps) {
   const { user } = await getAuth();
   const { ticketId } = await params;
 
-  const [ticket, comments] = await Promise.all([
+  const [ticket, paginatedComments] = await Promise.all([
     getTicket(ticketId!),
     getComments(ticketId!),
   ]);
@@ -37,7 +37,10 @@ export default async function TicketPage({ params }: TicketPageProps) {
       <Separator />
       <div className='flex animate-fade-in-from-top justify-center'>
         <TicketItem ticket={ticket} isDetail>
-          <Comments ticketId={ticket.id} comments={comments} />
+          <Comments
+            ticketId={ticket.id}
+            paginatedComments={paginatedComments}
+          />
         </TicketItem>
       </div>
     </div>
