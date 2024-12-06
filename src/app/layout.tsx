@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import Sidebar from '@/app/_navigation/sidebar/components/sidebar';
+import ReactQueryProvider from '@/app/_providers/react-query/react-query-provider';
 import Header from '@/components/header';
 import ThemeProvider from '@/components/theme/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
@@ -35,14 +36,16 @@ export default function RootLayout({
       >
         <NuqsAdapter>
           <ThemeProvider>
-            <Header />
-            <div className='flex h-screen border-collapse overflow-hidden'>
-              <Sidebar />
-              <main className='flex min-h-screen flex-1 flex-col overflow-y-auto overflow-x-hidden bg-secondary/20 px-8 py-24'>
-                {children}
-              </main>
-            </div>
-            <Toaster expand />
+            <ReactQueryProvider>
+              <Header />
+              <div className='flex h-screen border-collapse overflow-hidden'>
+                <Sidebar />
+                <main className='flex min-h-screen flex-1 flex-col overflow-y-auto overflow-x-hidden bg-secondary/20 px-8 py-24'>
+                  {children}
+                </main>
+              </div>
+              <Toaster expand />
+            </ReactQueryProvider>
           </ThemeProvider>
         </NuqsAdapter>
       </body>
