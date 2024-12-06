@@ -8,21 +8,23 @@ import { PaginatedData } from '@/utils/types';
 
 export default async function getComments(
   ticketId: string,
-  offset?: number,
+  cursor?: string,
 ): Promise<PaginatedData<CommentWithMetadata>> {
   const { user } = await getAuth();
 
   const where = {
     ticketId,
+    id: {
+      lt: cursor,
+    },
   };
-  const skip = offset ?? 0;
   const take = 2;
 
-  const [comments, count] = await prisma.$transaction([
+  // eslint-disable-next-line prefer-const
+  let [comments, count] = await prisma.$transaction([
     prisma.comment.findMany({
       where,
-      skip,
-      take,
+      take: take + 1,
       include: {
         user: {
           select: {
@@ -30,14 +32,20 @@ export default async function getComments(
           },
         },
       },
-      orderBy: {
-        createdAt: 'desc',
-      },
+      orderBy: [
+        {
+          createdAt: 'desc',
+        },
+        { id: 'desc' },
+      ],
     }),
     prisma.comment.count({
       where,
     }),
   ]);
+
+  const hasNextPage: boolean = comments.length > take;
+  comments = hasNextPage ? comments.slice(0, -1) : comments;
 
   return {
     list: comments.map((comment) => ({
@@ -46,7 +54,8 @@ export default async function getComments(
     })),
     metadata: {
       count,
-      hasNextPage: count > skip + take,
+      hasNextPage,
+      cursor: comments.at(-1)?.id,
     },
   };
 }

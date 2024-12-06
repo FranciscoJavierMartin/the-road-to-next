@@ -25,7 +25,7 @@ export default function Comments({
   const [metadata, setMetadata] = useState(paginatedComments.metadata);
 
   async function handleMore(): Promise<void> {
-    const morePaginatedComments = await getComments(ticketId, comments.length);
+    const morePaginatedComments = await getComments(ticketId, metadata.cursor);
     setComments((prev) => [...prev, ...morePaginatedComments.list]);
     setMetadata(morePaginatedComments.metadata);
   }
