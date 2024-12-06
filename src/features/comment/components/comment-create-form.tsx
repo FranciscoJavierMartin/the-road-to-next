@@ -26,7 +26,9 @@ export default function CommentCreateForm({
     EMPTY_ACTION_STATE,
   );
 
-  function handleSuccess(actionState: ActionState): void {
+  function handleSuccess(
+    actionState: ActionState<CommentWithMetadata | undefined>,
+  ): void {
     onCreateComment?.(actionState.data as CommentWithMetadata);
   }
 
