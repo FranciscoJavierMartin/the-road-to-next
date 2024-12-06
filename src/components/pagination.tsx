@@ -6,6 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { PaginatedData } from '@/utils/types';
 
 type PageAndSize = {
   page: number;
@@ -15,10 +16,7 @@ type PageAndSize = {
 type PaginationProps = {
   pagination: PageAndSize;
   onPagination: (pagination: PageAndSize) => void;
-  paginationMetadata: {
-    count: number;
-    hasNextPage: boolean;
-  };
+  paginationMetadata: PaginatedData<unknown>['metadata'];
 };
 
 export default function Pagination({
