@@ -1,10 +1,14 @@
+import getAuth from '@/features/auth/queries/get-auth';
+import isOwner from '@/features/auth/utils/is-owner';
 import { CommentWithMetadata } from '@/features/comment/types';
 import { prisma } from '@/lib/prisma';
 
 export default async function getComments(
   ticketId: string,
 ): Promise<CommentWithMetadata[]> {
-  return await prisma.comment.findMany({
+  const { user } = await getAuth();
+
+  const comments = await prisma.comment.findMany({
     where: {
       ticketId,
     },
@@ -19,4 +23,9 @@ export default async function getComments(
       createdAt: 'desc',
     },
   });
+
+  return comments.map((comment) => ({
+    ...comment,
+    isOwner: isOwner(user, comment),
+  }));
 }
