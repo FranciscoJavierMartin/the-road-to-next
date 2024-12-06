@@ -27,15 +27,19 @@ export async function createComment(
   try {
     const data = createCommentSchema.parse(Object.fromEntries(formData));
 
-    await prisma.comment.create({
+    const comment = await prisma.comment.create({
       data: {
         userId: user.id,
         ticketId,
         ...data,
       },
+      include: { user: true },
     });
 
-    res = toActionState('SUCCESS', 'Comment created');
+    res = toActionState('SUCCESS', 'Comment created', undefined, {
+      ...comment,
+      isOwner: true,
+    });
     revalidatePath(ticketPath(ticketId));
   } catch (error) {
     res = fromErrorToActionState(error);
