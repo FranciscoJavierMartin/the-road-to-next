@@ -3,6 +3,7 @@ import Breadcrumbs from '@/components/breadcrumbs';
 import { Separator } from '@/components/ui/separator';
 import getAuth from '@/features/auth/queries/get-auth';
 import isOwner from '@/features/auth/utils/is-owner';
+import Comments from '@/features/comment/components/comments';
 import getComments from '@/features/comment/queries/get-comments';
 import TicketItem from '@/features/ticket/components/ticket-item';
 import getTicket from '@/features/ticket/queries/get-ticket';
@@ -35,7 +36,9 @@ export default async function TicketPage({ params }: TicketPageProps) {
       />
       <Separator />
       <div className='flex animate-fade-in-from-top justify-center'>
-        <TicketItem ticket={ticket} isDetail comments={comments} />
+        <TicketItem ticket={ticket} isDetail>
+          <Comments ticketId={ticket.id} comments={comments} />
+        </TicketItem>
       </div>
     </div>
   ) : (

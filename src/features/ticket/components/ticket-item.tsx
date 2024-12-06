@@ -7,6 +7,7 @@ import {
   SquareArrowOutUpRight,
 } from 'lucide-react';
 import Link from 'next/link';
+import { PropsWithChildren } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -15,8 +16,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import Comments from '@/features/comment/components/comments';
-import { CommentWithMetadata } from '@/features/comment/types';
 import TicketMoreMenu from '@/features/ticket/components/ticket-more-menu';
 import { TICKET_ICONS } from '@/features/ticket/constants';
 import { TicketWithMetadata } from '@/features/ticket/types';
@@ -26,14 +25,13 @@ import { toCurrencyFromCent } from '@/utils/currency';
 type TicketItemProps = {
   ticket: TicketWithMetadata;
   isDetail?: boolean;
-  comments?: CommentWithMetadata[];
 };
 
 export default function TicketItem({
   ticket,
   isDetail,
-  comments,
-}: TicketItemProps) {
+  children,
+}: PropsWithChildren<TicketItemProps>) {
   const detailButton = (
     <Button asChild variant='outline' size='icon'>
       <Link prefetch href={ticketPath(ticket.id)}>
@@ -108,7 +106,7 @@ export default function TicketItem({
           )}
         </div>
       </div>
-      {isDetail ? <Comments ticketId={ticket.id} comments={comments} /> : null}
+      {children}
     </div>
   );
 }
